@@ -34,6 +34,7 @@ init deploymentResponse =
         defaultDeploymentForm
         NotAsked
         deploymentResponse
+        Nothing
 
 
 {-| reinitializeDeployment : takes an incoming deployment and reinitialized page input arguments
@@ -262,5 +263,8 @@ update model msg =
                             deploymentModel.repo
                             body
                     )
+
+                ChangeUrl url ->
+                    ( { deploymentModel | url = Just url }, Cmd.none )
     in
     ( { model | deploymentModel = sm }, action )

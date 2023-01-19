@@ -21,6 +21,9 @@ import RemoteData
 import Routes
 import Svg.Attributes
 import SvgBuilder exposing (buildStatusToIcon)
+import Url exposing (Url, Protocol)
+import Url.Parser exposing (Parser, parse, s, (<?>))
+import Url.Parser.Query as Query
 import Util exposing (largeLoader)
 import Vela exposing (Deployment, DeploymentsModel, Org, Repo)
 
@@ -47,11 +50,14 @@ addForm deploymentModel =
     let
         deployment =
             deploymentModel.form
+        url =
+            deploymentModel.url
     in
     div [ class "deployment-form" ]
         [ h2 [ class "deployment-header" ] [ text "Add Deployment" ]
         , viewDeployEnabled deploymentModel.repo_settings
-        , viewValueInput "Target" deployment.target "provide the name for the target deployment environment (default: \"production\")"
+        , viewValueInput "Target" (Maybe.withDefault deployment.target
+          (getQueryString "target" url)) "provide the name for the target deployment environment (default: \"production\")"
         , viewValueInput "Ref" deployment.ref "provide the reference to deploy - this can be a branch, commit (SHA) or tag (default: \"refs/heads/master\")"
         , viewValueInput "Description" deployment.description "provide the description for the deployment (default: \"Deployment request from Vela\")"
         , viewValueInput "Task" deployment.task "Provide the task for the deployment (default: \"deploy:vela\")"
@@ -60,6 +66,14 @@ addForm deploymentModel =
         , viewSubmitButtons
         ]
 
+getQueryString : String -> Maybe Url -> Maybe String
+getQueryString key url =
+    let
+        parser = s "add-deployment" <?> Query.string key
+    in
+        case url of
+          Just realUrl -> parse parser realUrl
+          Nothing -> Nothing
 
 {-| viewPreview : renders single deployment item preview
 -}

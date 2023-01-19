@@ -35,6 +35,8 @@ git clone git@github.com:go-vela/ui.git $HOME/go-vela/ui
 cd $HOME/go-vela/ui
 ```
 
+* Copy `.env.example` to `.env`
+
 * If using GitHub Enterprise (default: `https://github.com`), add the Web URL to a local `.env` file:
 
 ```bash

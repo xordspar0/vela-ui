@@ -18,6 +18,7 @@ import Http
 import Http.Detailed
 import Pages exposing (Page)
 import RemoteData exposing (WebData)
+import Url exposing (Url)
 import Vela exposing (Deployment, KeyValuePair, Org, Repo, Repository, Team)
 
 
@@ -45,6 +46,7 @@ type alias Model msg =
     , form : DeploymentForm
     , repo_settings : WebData Repository
     , deploymentResponse : DeploymentResponse msg
+    , url : Maybe Url
     }
 
 
@@ -80,3 +82,4 @@ type Msg
     | AddParameter DeploymentForm
     | RemoveParameter KeyValuePair
     | AddDeployment
+    | ChangeUrl Url
